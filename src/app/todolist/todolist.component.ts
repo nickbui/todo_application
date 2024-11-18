@@ -1,12 +1,14 @@
-import { Component, signal, model, ElementRef, ViewChild } from '@angular/core';
+import { Component, signal, model, ElementRef, ViewChild, inject } from '@angular/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
+import { MatDialog } from '@angular/material/dialog';
 import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TodoItem } from './todoItem';
 import { MatCardModule } from '@angular/material/card';
+import { NewTodoDialogComponent } from '../new_todolist_dialog/new-todo-dialog/new-todo-dialog.component';
 
 @Component({
   selector: 'app-todolist',
@@ -17,27 +19,35 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class TodolistComponent {
   todoTaskList = signal<TodoItem[]>([]);
-  isFieldsEmpty = signal(false);
+  currentDate = new Date();
 
-  inputTodoTitle = new FormControl('');
-  inputTodoDueDate = new FormControl(null);
-  inputTodoDescription = new FormControl('');
+  todoItem = signal<TodoItem>({
+    todoTitle: "",
+    todoDueDate: new Date,
+    todoDescription: ""
+  })
 
-  addToTodoTask(): void {
-    if (this.inputTodoTitle.value === '' || this.inputTodoDueDate === null || this.inputTodoDescription.value === '') {
-      this.isFieldsEmpty.set(true);
-      return;
-    }
-    console.log("Adding Todo item to List!");
-    this.todoTaskList.update(newTodoItem => [...newTodoItem, { todoTitle: this.inputTodoTitle.value!, todoDueDate: this.inputTodoDueDate.value!, todoDescription: this.inputTodoDescription.value! }]);
-    this.clearInputFields();
-    this.isFieldsEmpty.set(false);
-  }
+  readonly newTodoDialog = inject(MatDialog);
 
-  clearInputFields(): void {
-    this.inputTodoTitle.setValue('');
-    this.inputTodoDueDate.setValue(null);
-    this.inputTodoDescription.setValue('');
+
+  // addToTodoTask(): void {
+  //   console.log("Adding Todo item to List!");
+  //   this.todoTaskList.update(newTodoItem => [...newTodoItem, { todoTitle: this.inputTodoTitle(), todoDueDate: this.inputTodoDueDate(), todoDescription: this.inputTodoDescription()}]);
+  // }
+
+  openDialog(): void{
+    const dialogRef = this.newTodoDialog.open(NewTodoDialogComponent, {
+      data: {todoTitle: this.todoItem().todoTitle, todoDueDate: this.todoItem().todoDueDate, todoDescription: this.todoItem().todoDescription},
+      height: '400px',
+      width: '600px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log("The dialog was closed");
+      if (result !== undefined){
+        console.log(result);
+      }
+    });
   }
 
 }
