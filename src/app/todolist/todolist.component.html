@@ -11,25 +11,28 @@
         </div>
     </div>
     <!--This is the todo portion of the page-->
-    <div class="pt-6 md:p-8 text-center md:text-left space-y-4">
-        <mat-list class="text-lg font-medium">
-            @for (indivTodoItem of todoTaskList(); track indivTodoItem) {
+    <div class="pt-6 md:p-8 text-center md:text-left">
+        <mat-list class="w-full justify-center items-center text-lg font-medium" >
             <div
-                class="block max-w-sm p-6 bg-slate-100 border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"><span
-                        class="text-blue-700">Task: </span>
-                    {{indivTodoItem.todoTitle}}</h2>
-                <p class="font-normal text-gray-700 dark:text-white"><span class="text-red-500">Due:</span>
-                    {{indivTodoItem.todoDueDate | date: 'mediumDate'}}</p>
-                <p class="font-normal text-gray-700 dark:text-gray-400">{{indivTodoItem.todoDescription}}</p>
-                <div class="flex items-center mb-4">
-                    <input id="checkbox" type="checkbox" value=""
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Mark
-                        Completed</label>
+                class="w-full p-6 bg-slate-100 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                <h1 class="md:flex justify-center items-center">Task List</h1>
+                <div class="w-full divide-y">
+                    @for (indivTodoItem of todoTaskList(); track indivTodoItem) {
+                        <div class="flex flex-row w-full justify-around items-center pt-10 pb-10">
+                            <div class="w-6/12">
+                                <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            </div>
+                            <div for="default-checkbox" class="flex flex-col w-6/12">
+                                <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-blue-700">
+                                    {{indivTodoItem.todoTitle}}</h2>
+                                <p class="font-normal text-gray-700 dark:text-red-500">
+                                    {{indivTodoItem.todoDueDate | date: 'mediumDate'}}</p>
+                                <p class="font-normal text-gray-700 dark:text-gray-400">{{indivTodoItem.todoDescription}}</p>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
-            }
         </mat-list>
     </div>
     

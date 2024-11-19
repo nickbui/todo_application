@@ -20,7 +20,7 @@ import { NewTodoDialogComponent } from '../new_todolist_dialog/new-todo-dialog/n
 export class TodolistComponent {
   todoTaskList = signal<TodoItem[]>([]);
   currentDate = new Date();
-
+  
   todoItem = signal<TodoItem>({
     todoTitle: "",
     todoDueDate: new Date,
@@ -29,11 +29,16 @@ export class TodolistComponent {
 
   readonly newTodoDialog = inject(MatDialog);
 
+  constructor(){
+    this.todoTaskList.update(newTodoItem => [...newTodoItem, { todoTitle: "Remove Subsriptions", todoDueDate: new Date, todoDescription: "Need to remove subscription for netflix"}]);
+  }
 
-  // addToTodoTask(): void {
-  //   console.log("Adding Todo item to List!");
-  //   this.todoTaskList.update(newTodoItem => [...newTodoItem, { todoTitle: this.inputTodoTitle(), todoDueDate: this.inputTodoDueDate(), todoDescription: this.inputTodoDescription()}]);
-  // }
+
+  addToTodoTask(): void {
+    console.log("Adding Todo item to List!");
+    this.todoTaskList.update(newTodoItem => [...newTodoItem, { todoTitle: this.todoItem().todoTitle, todoDueDate: this.todoItem().todoDueDate, todoDescription: this.todoItem().todoDescription}]);
+    this.todoItem.set({todoTitle: "", todoDueDate: new Date, todoDescription:""})
+  }
 
   openDialog(): void{
     const dialogRef = this.newTodoDialog.open(NewTodoDialogComponent, {
@@ -45,7 +50,8 @@ export class TodolistComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log("The dialog was closed");
       if (result !== undefined){
-        console.log(result);
+        this.todoItem.set(result)
+        this.addToTodoTask();
       }
     });
   }
